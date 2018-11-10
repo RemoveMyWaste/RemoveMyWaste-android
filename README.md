@@ -4,7 +4,7 @@
 
 - I'm in android studio: File > New > Project from Version Control > Git     
 - I'm on the splash screen: Checkout project from Version Control
-2) Enter **https://github.com/cs361-group24/androidstudio** into the url field. Click OK.
+2) Enter **https://github.com/cs361-group24/androidstudio** into the url field. Click OK/Clone.
 
 ## To commit after changing files
 
