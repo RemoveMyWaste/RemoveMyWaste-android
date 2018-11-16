@@ -2,6 +2,9 @@ package com.liambeckman.removemywaste;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.content.Intent;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -10,14 +13,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    public void showMaterials(View view) {
+        Intent intent = new Intent(this, search_material.class);
+        startActivity(intent);
+    }
 }
 
 
-Button btn = (Button)findViewById(R.id.button4);
 
-btn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(MainActivity.this, MainActivity.class));
-    }
-});
+
