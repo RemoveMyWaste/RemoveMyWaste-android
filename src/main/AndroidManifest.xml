@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".search_material"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".SearchableActivity"
             android:windowSoftInputMode="adjustPan">
@@ -31,8 +34,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <activity android:name=".SearchableActivity"></activity>
+        <activity android:name=".centers"></activity>
     </application>
 
 </manifest>
