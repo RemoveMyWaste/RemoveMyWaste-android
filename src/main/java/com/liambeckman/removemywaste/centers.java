@@ -108,6 +108,10 @@ public class centers extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Display the repspose string.
                         //mTextView.setText(response);
+                        if (response.isEmpty()) {
+                            return;
+                        }
+
                         final String[] responseArray = response.split("\\R");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
