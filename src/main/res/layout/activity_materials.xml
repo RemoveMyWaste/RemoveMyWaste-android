@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".centers">
+    tools:context=".materials">
 
     <!--<SearchView
         android:id="@+id/searchView"
@@ -17,27 +17,29 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />-->
     <ScrollView
         android:id="@+id/results"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="false"
+        android:fillViewport="true"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:id="@+id/linear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/material"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Disposal"
+                android:text="Material"
                 android:textSize="40sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.508"
@@ -54,64 +56,35 @@
                 />-->
 
             <TextView
-                android:id="@+id/material"
-                android:layout_width="wrap_content"
+                android:id="@+id/handling"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/disposal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linearCenters"
+                android:id="@+id/linearDisposal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|bottom"
                 android:orientation="vertical">
 
-                <TextView
+                <Button
                     android:id="@+id/centers"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.507"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/linearResults"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                    android:text="Show Disposal Locations"
+                    android:onClick="showDisposal"
+                    android:textAllCaps="false" />
 
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,9 @@
 package com.liambeckman.removemywaste;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import android.util.Log;
@@ -19,17 +20,38 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import android.content.Intent;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
-public class centers extends AppCompatActivity {
 
+public class disposal extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_centers);
-    }
+        setContentView(R.layout.activity_disposal);
+        //final TextView mTextView = (TextView) findViewById(R.id.textView3);
+        Intent intent = getIntent();
+        String material = intent.getExtras().getString("material");
 
+        final TextView mTextView = (TextView) findViewById(R.id.material);
+        final TextView centers = (TextView) findViewById(R.id.centers);
+        final TextView disposal = (TextView) findViewById(R.id.disposal);
 
+        mTextView.setText(material);
+
+        String key = "pro";
+        final Boolean pro = intent.getExtras().getBoolean(key);
+
+        if (pro) {
+            centers.setText("professional disposal required" + " \u2605");
+            searchCenters(material);
+        }
+        else {
+            disposal.setText("home disposal allowed");
+            //searchDisposal(material);
+        }
+
+        }
 
     public void searchCenters(String material) {
         final TextView mTextView = (TextView) findViewById(R.id.centers);
@@ -93,3 +115,4 @@ public class centers extends AppCompatActivity {
         queue.add(stringRequest);
     }
 }
+

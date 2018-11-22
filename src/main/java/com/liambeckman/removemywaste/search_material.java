@@ -45,7 +45,7 @@ mButton.setOnClickListener(new View.OnClickListener() {
 
     }
 
-    protected void doMySearch (final String query){
+    public void doMySearch (final String query){
         // https://developer.android.com/training/volley/simple#java
         final TextView mTextView = (TextView) findViewById(R.id.textView3);
         /*
@@ -79,22 +79,35 @@ mButton.setOnClickListener(new View.OnClickListener() {
                         final String[] responseArray = response.split("\\R");
                         //Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
-                        for (int i = 0; i < responseArray.length; i += 3) {
-                            Log.d("MyApp", "responseArray: " + responseArray[i]);
+                        for (int i = 0; i < responseArray.length; i += 2) {
+                            Log.d("MyApp", "responseArray: " + responseArray[i] + " : " + responseArray[i+1]);
                             Button newMaterial = new Button(mTextView.getContext());
-                            newMaterial.setText(responseArray[i]);
+
+
+                            final String insert;
+                            final Boolean pro;
+                            if (responseArray[i + 1].equals("pro")) {
+                                insert = responseArray[i] + " \u2605";
+                                pro = true;
+                            }
+                            else {
+                                insert = responseArray[i];
+                                pro = false;
+                            }
+                            newMaterial.setText(insert);
+
                             newMaterial.setId(i);
                             newMaterial.setAllCaps(false);
                             ll.addView(newMaterial, lp);
-                            final String myMaterial = responseArray[i];
+                            final String material = responseArray[i];
 
                             newMaterial.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
-                                    // TODO Auto-generated method stub
-                                    Intent i = new Intent(getApplicationContext(), centers.class);
-                                    i.putExtra("material", myMaterial);
+                                    Intent i = new Intent(getApplicationContext(), materials.class);
+                                    i.putExtra("material", material);
+                                    i.putExtra("pro", pro);
                                     startActivity(i);
                                 }
                             });
