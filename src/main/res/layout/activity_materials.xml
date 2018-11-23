@@ -68,22 +68,24 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linearDisposal"
+                android:id="@+id/linearCenters"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|bottom"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Button
+                <TextView
                     android:id="@+id/centers"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show Disposal Locations"
-                    android:onClick="showDisposal"
-                    android:textAllCaps="false" />
-
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.507"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 

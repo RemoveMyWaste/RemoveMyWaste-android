@@ -31,7 +31,7 @@ public class centers extends AppCompatActivity {
         Intent intent = getIntent();
         String center = intent.getExtras().getString("center");
 
-        final TextView mTextView = (TextView) findViewById(R.id.centers);
+        final TextView mTextView = (TextView) findViewById(R.id.center);
         mTextView.setText(center);
 
         searchSchedules(center);

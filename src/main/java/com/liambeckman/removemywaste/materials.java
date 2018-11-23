@@ -24,31 +24,27 @@ public class materials extends AppCompatActivity {
         setContentView(R.layout.activity_materials);
 
         final TextView mTextView = (TextView) findViewById(R.id.material);
+        final TextView centers = (TextView) findViewById(R.id.centers);
+        final TextView disposal = (TextView) findViewById(R.id.disposal);
         Intent intent = getIntent();
         final String material = intent.getExtras().getString("material");
 
         String key = "pro";
         final Boolean pro = intent.getExtras().getBoolean(key);
 
+        doMySearch(material);
+
         if (pro) {
             mTextView.setText(material + " \u2605");
+            centers.setText("professional disposal required" + " \u2605");
+            searchCenters(material);
         }
          else {
             mTextView.setText(material);
+            disposal.setText("home disposal allowed");
+            //searchDisposal(material);
         }
 
-        Button disposal = (Button) findViewById(R.id.centers);
-        disposal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), disposal.class);
-                i.putExtra("material", material);
-                i.putExtra("pro", pro);
-                startActivity(i);
-            }
-        });
-
-        doMySearch(material);
     }
 
     public void doMySearch (final String query){
@@ -83,5 +79,72 @@ public class materials extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+
+    public void searchCenters(String material) {
+        final TextView mTextView = (TextView) findViewById(R.id.centers);
+        final Button[] materials = new Button[100];
+        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearCenters);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://removemywaste.liambeckman.com/search-centers?search=" + material;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the repspose string.
+                        //mTextView.setText(response);
+
+                        if (response.isEmpty()) {
+                            return;
+                        }
+
+                        final String[] responseArray = response.split("\\R");
+                        Log.d("MyApp", "response: " + response);
+                        mTextView.setText("");
+                        for (int i = 0; i < responseArray.length; i += 2) {
+                            Log.d("MyApp", "responseArray: " + responseArray[i]);
+                            Button newCenter = new Button(mTextView.getContext());
+                            TextView address = new TextView(mTextView.getContext());
+                            newCenter.setText(responseArray[i]);
+                            newCenter.setId(i);
+                            newCenter.setAllCaps(false);
+                            ll.addView(newCenter, lp);
+
+                            address.setText(responseArray[i+1]);
+
+                            ll.addView(address, lp);
+
+                            final String center = responseArray[i];
+
+                            newCenter.setOnClickListener(new View.OnClickListener() {
+
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent(getApplicationContext(), centers.class);
+                                    i.putExtra("center", center);
+                                    startActivity(i);
+                                }
+                            });
+
+                            //materials[i].setText(responseArray[i*3]);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mTextView.setText("That didn't work!");
+            }
+        });
+
+        mTextView.setText("Request sent. Waiting for Response...");
+        //ll.removeAllViews();
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
 
 }
