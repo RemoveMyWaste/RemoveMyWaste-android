@@ -1,6 +1,12 @@
 # Contributing
 
-## Most of the app is developed in android studio
+Pull requests welcome!
+
+## dev environment
+
+The user-facing components of the app are developed in [android studio](https://developer.android.com/studio/).
+
+The database that provides the hazardous materials data to the app may be found here ⇢ [database](https://github.com/cs361-group24/database).
 
 ### To clone this repo into android studio
 
@@ -13,7 +19,7 @@
 1) VCS > Git > Commit (Ctrl+K)
 2) Select the top-most option (In my version of android studio, it was "Unversioned Files").
 3) Write a commit message. Click Commit.
-4) There might be errors that you can review. I recommend just committing.
+4) There might be errors that you can optionally review.
 
 ### To push to the master branch after commit
 
