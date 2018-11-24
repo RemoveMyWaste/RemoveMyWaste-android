@@ -134,7 +134,7 @@ public class materials extends AppCompatActivity {
                             return;
                         }
 
-                        final String[] responseArray = response.split("\\R");
+                        final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i += 2) {
@@ -151,6 +151,7 @@ public class materials extends AppCompatActivity {
                             ll.addView(address, lp);
 
                             final String center = responseArray[i];
+                            final String mAddress = responseArray[i+1];
 
                             newCenter.setOnClickListener(new View.OnClickListener() {
 
@@ -158,6 +159,7 @@ public class materials extends AppCompatActivity {
                                 public void onClick(View v) {
                                     Intent i = new Intent(getApplicationContext(), centers.class);
                                     i.putExtra("center", center);
+                                    i.putExtra("address", mAddress);
                                     startActivity(i);
                                 }
                             });

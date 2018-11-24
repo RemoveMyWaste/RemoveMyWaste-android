@@ -76,7 +76,7 @@ mButton.setOnClickListener(new View.OnClickListener() {
                     public void onResponse(String response) {
                         // Display the repspose string.
                         //mTextView.setText(response);
-                        final String[] responseArray = response.split("\\R");
+                        final String[] responseArray = response.split("\\r?\\n");
                         //Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i += 2) {

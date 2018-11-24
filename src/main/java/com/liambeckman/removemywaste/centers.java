@@ -30,9 +30,12 @@ public class centers extends AppCompatActivity {
 
         Intent intent = getIntent();
         String center = intent.getExtras().getString("center");
+        String address = intent.getExtras().getString("address");
 
-        final TextView mTextView = (TextView) findViewById(R.id.center);
+        TextView mTextView = (TextView) findViewById(R.id.center);
+        TextView mAddress = (TextView) findViewById(R.id.address);
         mTextView.setText(center);
+        mAddress.setText(address);
 
         searchSchedules(center);
 
@@ -58,7 +61,7 @@ public class centers extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Display the repspose string.
                         //mTextView.setText(response);
-                        final String[] responseArray = response.split("\\R");
+                        final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i++) {
@@ -112,7 +115,7 @@ public class centers extends AppCompatActivity {
                             return;
                         }
 
-                        final String[] responseArray = response.split("\\R");
+                        final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i += 3) {
@@ -120,18 +123,17 @@ public class centers extends AppCompatActivity {
                             TextView day_of_week = new TextView(mTextView.getContext());
                             TextView time = new TextView(mTextView.getContext());
 
-                            //day_of_week.setText(responseArray[i]);
+                            LinearLayout llhorizontal = new LinearLayout(mTextView.getContext());
+                            llhorizontal.setOrientation(LinearLayout.HORIZONTAL);
 
-                            int spacerNum = 10 - responseArray[i].length();
-                            StringBuilder spacer = new StringBuilder();
-                            for (int n = 0; n < spacerNum; n++) {
-                                spacer.append(" ");
-                            }
+                            day_of_week.setText(responseArray[i]);
+                            time.setText(responseArray[i+1] + " to " + responseArray[i+2]);
 
-                            time.setText(responseArray[i] + spacer + ": " + responseArray[i+1] + " to " + responseArray[i+2]);
+                            llhorizontal.addView(day_of_week, lp);
+                            llhorizontal.addView(time, lp);
 
-                            //ll.addView(day_of_week, lp);
-                            ll.addView(time, lp);
+                            ll.addView(llhorizontal, lp);
+
 
 
                             final String center = responseArray[i];

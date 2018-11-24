@@ -75,7 +75,7 @@ public class disposal extends AppCompatActivity {
                             return;
                         }
 
-                        final String[] responseArray = response.split("\\R");
+                        final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i += 2) {
