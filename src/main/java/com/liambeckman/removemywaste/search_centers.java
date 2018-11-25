@@ -53,6 +53,7 @@ public class search_centers extends AppCompatActivity {
                         //mTextView.setText(response);
 
                         if (response.isEmpty()) {
+                            mTextView.setText("No centers found.");
                             return;
                         }
 
