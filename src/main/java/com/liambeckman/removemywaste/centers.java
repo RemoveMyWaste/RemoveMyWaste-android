@@ -98,7 +98,8 @@ public class centers extends AppCompatActivity {
         final TextView mTextView = (TextView) findViewById(R.id.status);
         final Button[] materials = new Button[100];
         final LinearLayout ll = (LinearLayout) findViewById(R.id.linearSchedules);
-        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(10, 5, 10, 5);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -127,6 +128,7 @@ public class centers extends AppCompatActivity {
                             llhorizontal.setOrientation(LinearLayout.HORIZONTAL);
 
                             day_of_week.setText(responseArray[i]);
+                            day_of_week.setWidth(250);
                             time.setText(responseArray[i+1] + " to " + responseArray[i+2]);
 
                             llhorizontal.addView(day_of_week, lp);
