@@ -61,6 +61,13 @@ public class centers extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Display the repspose string.
                         //mTextView.setText(response);
+
+                        if (response.isEmpty()) {
+                            mTextView.setText("No materials found for this center.");
+                            mTextView.setTextColor(0xffFF3232);
+                            return;
+                        }
+
                         final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
@@ -112,7 +119,10 @@ public class centers extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Display the repspose string.
                         //mTextView.setText(response);
+
                         if (response.isEmpty()) {
+                            mTextView.setText("No schedules found for this center.");
+                            mTextView.setTextColor(0xffFF3232);
                             return;
                         }
 

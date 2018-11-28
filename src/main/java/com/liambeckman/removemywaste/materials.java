@@ -60,6 +60,12 @@ public class materials extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        if (response.isEmpty()) {
+                            mTextView.setText("No handling instructions found for this material.");
+                            mTextView.setTextColor(0xffFF3232);
+                            return;
+                        }
                         // Display the repspose string.
                         //mTextView.setText(response);
                         //Log.d("MyApp", "response: " + response);
@@ -92,6 +98,12 @@ public class materials extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        if (response.isEmpty()) {
+                            mTextView.setText("No disposal instructions found for this material.");
+                            mTextView.setTextColor(0xffFF3232);
+                            return;
+                        }
                         // Display the repspose string.
                         //mTextView.setText(response);
                         //Log.d("MyApp", "response: " + response);
@@ -131,6 +143,9 @@ public class materials extends AppCompatActivity {
                         //mTextView.setText(response);
 
                         if (response.isEmpty()) {
+                            mTextView.setText("No centers found for this material.");
+                            mTextView.setTextColor(0xffFF3232);
+                            Log.d("MyApp", "NO CNETERS ODUND" + "Resposne: " + response);
                             return;
                         }
 

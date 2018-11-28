@@ -56,6 +56,18 @@
                 />-->
 
             <TextView
+                android:id="@+id/handlingTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Handling/Disposal Instructions:"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.508"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+            <TextView
                 android:id="@+id/handling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,6 +78,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent" />
+
 
             <TextView
                 android:id="@+id/disposalHome"
@@ -87,11 +100,13 @@
                 app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent" />
 
+
             <LinearLayout
                 android:id="@+id/linearCenters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/centers"

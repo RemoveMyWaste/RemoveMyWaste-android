@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -32,17 +36,43 @@ public class search_material extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_material);
 
-       mButton = (Button)findViewById(R.id.button1);
+        doMySearch("");
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        EditText edit_txt = (EditText) findViewById(R.id.editText1);
+        mButton = (Button)findViewById(R.id.button1);
+
+        edit_txt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+         @Override
+         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                 mButton.performClick();
+
+                 hideKeyboard(v);
+                 return true;
+             }
+             return false;
+         }
+        });
+
 mButton.setOnClickListener(new View.OnClickListener() {
     	public void onClick(View view) {
             mEdit   = (EditText)findViewById(R.id.editText1);
             mEdit.getText().toString();
+
+            hideKeyboard(view);
             //mText.setText("Welcome "+mEdit.getText().toString()+"!");
             doMySearch(mEdit.getText().toString());
       	}
         });
 
 
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void doMySearch (final String query){
@@ -79,6 +109,7 @@ mButton.setOnClickListener(new View.OnClickListener() {
 
                         if (response.isEmpty()) {
                             mTextView.setText("No materials found.");
+                            mTextView.setTextColor(0xffFF3232);
                             return;
                         }
                         final String[] responseArray = response.split("\\r?\\n");
