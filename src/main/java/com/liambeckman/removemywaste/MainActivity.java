@@ -23,6 +23,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, search_centers.class);
         startActivity(intent);
     }
+
+    public void showAbout(View view) {
+        Intent intent = new Intent(this, about.class);
+        startActivity(intent);
+    }
 }
 
 

@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="285dp"
-        android:layout_height="126dp"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
         android:onClick="showMaterials"
         android:text="@string/search_material"
         android:textSize="30sp"
@@ -17,19 +17,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="132dp"
-        android:text="@string/view_facilities"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
         android:onClick="showCenters"
+        android:text="@string/view_facilities"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_about"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button4" />
+
+    <Button
+        android:id="@+id/button_about"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:onClick="showAbout"
+        android:text="About"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <!--<Button
         android:id="@+id/button2"
