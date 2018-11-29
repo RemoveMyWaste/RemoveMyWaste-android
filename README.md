@@ -12,8 +12,9 @@ Improper household hazardous waste removal can cause environmental pollution and
 Android device or emulator running Android version 4.0.4 (Ice Cream Sandwich, API Level 15) or above.    
 
 ## Download URL: 
-(https://github.com/cs361-group24/RemoveMyWaste/releases)
-Download RemoveMyWaste.apk from the latest release.
+
+- Go to to https://github.com/cs361-group24/RemoveMyWaste/releases
+- Download `RemoveMyWaste.apk` from the latest release.
 
 ## To Install:
 - Open the above file in your android device.
