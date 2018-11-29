@@ -1,6 +1,6 @@
 # RemoveMyWaste
 
-![RemoveMyWaste icon][/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png]
+![RemoveMyWaste icon](/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
 
 # Abstract
 
