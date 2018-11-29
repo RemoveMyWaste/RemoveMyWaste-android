@@ -36,7 +36,7 @@ public class materials extends AppCompatActivity {
 
         if (pro) {
             mTextView.setText(material + " \u2605");
-            centers.setText("professional disposal required" + " \u2605");
+            disposal.setText("professional disposal required" + " \u2605");
             searchCenters(material);
         }
          else {
