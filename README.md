@@ -6,6 +6,26 @@
 
 Improper household hazardous waste removal can cause environmental pollution and physical injuries, having a negative impact on human health. The RemoveMyWaste app provides a solution to this issue by providing consumers with easier access to proper waste removal information and connecting them to local waste collection authorities if necessary for their waste to be safely removed.
 
+# Installation
+
+## Requirements:
+Android device or emulator running Android version 4.0.4 (Ice Cream Sandwich, API Level 15) or above.    
+
+## Download URL: 
+(https://github.com/cs361-group24/RemoveMyWaste/releases)
+Download RemoveMyWaste.apk from the latest release.
+
+## To Install:
+- Open the above file in your android device.
+- Allow “Install unknown apps” permission if you trust the app will not harm your device.
+- Install and run.
+
+## To Uninstall:
+- Open your device's `Settings`
+- Select `App & Notifications`
+- Select `RemoveMyWaste`
+- Select `Uninstall`
+
 # Contributing
 
 Pull requests welcome!
