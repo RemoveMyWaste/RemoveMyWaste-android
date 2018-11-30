@@ -16,6 +16,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import android.text.Html;
+import android.net.Uri;
+
 public class materials extends AppCompatActivity {
 
     @Override
@@ -156,7 +159,7 @@ public class materials extends AppCompatActivity {
                             Log.d("MyApp", "responseArray: " + responseArray[i]);
                             Button newCenter = new Button(mTextView.getContext());
                             TextView address = new TextView(mTextView.getContext());
-                            newCenter.setText(responseArray[i]);
+                            newCenter.setText(Html.fromHtml(responseArray[i]));
                             newCenter.setId(i);
                             newCenter.setAllCaps(false);
                             ll.addView(newCenter, lp);
