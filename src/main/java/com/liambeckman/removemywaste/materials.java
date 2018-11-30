@@ -56,7 +56,7 @@ public class materials extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-handling?search=" + query;
+        String url = "https://removemywaste.liambeckman.com/search-handling?search=" + Uri.encode(query);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -94,7 +94,7 @@ public class materials extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-disposal?search=" + query;
+        String url = "https://removemywaste.liambeckman.com/search-disposal?search=" + Uri.encode(query);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
