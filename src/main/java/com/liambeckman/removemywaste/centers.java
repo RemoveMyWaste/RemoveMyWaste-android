@@ -3,6 +3,7 @@ package com.liambeckman.removemywaste;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.text.Spanned;
 import android.widget.TextView;
 
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.android.volley.toolbox.Volley;
 
 import android.content.Intent;
 
+import android.text.Html;
+import android.net.Uri;
+
 public class centers extends AppCompatActivity {
 
     @Override
@@ -34,12 +38,13 @@ public class centers extends AppCompatActivity {
 
         TextView mTextView = (TextView) findViewById(R.id.center);
         TextView mAddress = (TextView) findViewById(R.id.address);
-        mTextView.setText(center);
+        mTextView.setText(Html.fromHtml(center));
         mAddress.setText(address);
 
-        searchSchedules(center);
+        Spanned centerSpan = Html.fromHtml(center);
+        searchSchedules(centerSpan.toString());
 
-        searchMaterials(center);
+        searchMaterials(centerSpan.toString());
     }
 
 
@@ -52,7 +57,7 @@ public class centers extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-centers-materials?search=" + center;
+        String url = "https://removemywaste.liambeckman.com/search-centers-materials?search=" + Uri.encode(center);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -67,6 +72,8 @@ public class centers extends AppCompatActivity {
                             mTextView.setTextColor(0xffFF3232);
                             return;
                         }
+
+                        Html.fromHtml(response);
 
                         final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
@@ -110,7 +117,8 @@ public class centers extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-schedules?search=" + center;
+        Log.d("MyApp", center);
+        String url = "https://removemywaste.liambeckman.com/search-schedules?search=" + Uri.encode(center);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

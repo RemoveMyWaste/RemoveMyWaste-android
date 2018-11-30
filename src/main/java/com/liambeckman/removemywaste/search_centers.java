@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.Intent;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import android.text.Html;
 
 public class search_centers extends AppCompatActivity {
 
@@ -102,14 +105,15 @@ public class search_centers extends AppCompatActivity {
                             return;
                         }
 
+
                         final String[] responseArray = response.split("\\r?\\n");
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
                         for (int i = 0; i < responseArray.length; i += 2) {
-                            Log.d("MyApp", "responseArray: " + responseArray[i]);
+                            Log.d("MyApp", "responseArray: " + Html.fromHtml(responseArray[i]));
                             Button newCenter = new Button(mTextView.getContext());
                             TextView address = new TextView(mTextView.getContext());
-                            newCenter.setText(responseArray[i]);
+                            newCenter.setText(Html.fromHtml(responseArray[i]));
                             newCenter.setId(i);
                             newCenter.setAllCaps(false);
                             ll.addView(newCenter, lp);
