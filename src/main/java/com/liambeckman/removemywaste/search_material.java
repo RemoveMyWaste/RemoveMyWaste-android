@@ -38,7 +38,7 @@ public class search_material extends AppCompatActivity {
 
         doMySearch("");
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         EditText edit_txt = (EditText) findViewById(R.id.editText1);
         mButton = (Button)findViewById(R.id.button1);
@@ -49,7 +49,7 @@ public class search_material extends AppCompatActivity {
              if (actionId == EditorInfo.IME_ACTION_DONE) {
                  mButton.performClick();
 
-                 hideKeyboard(v);
+                 //hideKeyboard(v);
                  return true;
              }
              return false;

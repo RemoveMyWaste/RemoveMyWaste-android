@@ -109,8 +109,8 @@ public class materials extends AppCompatActivity {
                         }
                         // Display the repspose string.
                         //mTextView.setText(response);
-                        //Log.d("MyApp", "response: " + response);
-                        mTextView.setText(response);
+                        Log.d("MyApp", "response: " + response);
+                        mTextView.setText(Html.fromHtml(response));
                         //materials[i].setText(responseArray[i*3]);
 
                     }
