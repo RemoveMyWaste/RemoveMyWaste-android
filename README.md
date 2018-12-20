@@ -56,3 +56,14 @@ The database that provides the hazardous materials data to the app may be found 
 
 ### Helpful Plugins:
 - [floobits](https://floobits.com/help/plugins/intellij): Collaborative editing similar to google docs (except for code). Requires you to setup up an account (should be free).
+
+## Roadmap
+
+A wishlist of sorts:
+
+- iOS version: This might involve porting form native Java to a cross-platform framework like React Native.
+- Web version: a parallel version for desktop users.
+- Switch from remote MySQL/MariaDB database to local SQLite: so users can read from the database without a network connection. An option to "Update database" would be helpful. Or even the option to "Select database" should another one be made.
+- Add map view.
+- Request user's location, so that the nearest center's are returned.
+- Add user profile with options to "Login/Logout" or "Continue as Guest" 
