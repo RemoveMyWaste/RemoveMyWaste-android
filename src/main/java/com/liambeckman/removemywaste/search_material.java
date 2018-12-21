@@ -23,6 +23,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 
 public class search_material extends AppCompatActivity {
 
@@ -36,35 +43,36 @@ public class search_material extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_material);
 
+        // Do initial search. This returns all materials in database.
         doMySearch("");
 
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         EditText edit_txt = (EditText) findViewById(R.id.editText1);
         mButton = (Button)findViewById(R.id.button1);
 
         edit_txt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-         @Override
-         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                 mButton.performClick();
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mButton.performClick();
 
-                 //hideKeyboard(v);
-                 return true;
-             }
-             return false;
-         }
+                    hideKeyboard(v);
+                    return true;
+                }
+                return false;
+            }
         });
 
-mButton.setOnClickListener(new View.OnClickListener() {
-    	public void onClick(View view) {
-            mEdit   = (EditText)findViewById(R.id.editText1);
-            mEdit.getText().toString();
+        mButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                mEdit   = (EditText)findViewById(R.id.editText1);
+                mEdit.getText().toString();
 
-            hideKeyboard(view);
-            //mText.setText("Welcome "+mEdit.getText().toString()+"!");
-            doMySearch(mEdit.getText().toString());
-      	}
+                hideKeyboard(view);
+                //mText.setText("Welcome "+mEdit.getText().toString()+"!");
+                doMySearch(mEdit.getText().toString());
+            }
         });
 
 
@@ -78,22 +86,9 @@ mButton.setOnClickListener(new View.OnClickListener() {
     public void doMySearch (final String query){
         // https://developer.android.com/training/volley/simple#java
         final TextView mTextView = (TextView) findViewById(R.id.textView3);
-        /*
-        final Button material1 = (Button) findViewById(R.id.material1);
-        final Button material2 = (Button) findViewById(R.id.material2);
-        final Button material3 = (Button) findViewById(R.id.material3);
-        final Button material4 = (Button) findViewById(R.id.material4);
-        final Button material5 = (Button) findViewById(R.id.material5);
-
-        final Button[] materials = {material1, material2, material3, material4, material5};
-        */
         final Button[] materials = new Button[100];
         final LinearLayout ll = (LinearLayout) findViewById(R.id.linearResults);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-
-        // ...
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -104,23 +99,50 @@ mButton.setOnClickListener(new View.OnClickListener() {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the repspose string.
-                        //mTextView.setText(response);
 
                         if (response.isEmpty()) {
                             mTextView.setText("No materials found.");
                             mTextView.setTextColor(0xffFF3232);
                             return;
                         }
+
                         final String[] responseArray = response.split("\\r?\\n");
                         //Log.d("MyApp", "response: " + response);
                         mTextView.setText("");
 
+                        String filename = "myfile";
+                        String fileContents = response;
+                        FileOutputStream outputStream;
+
+                        try {
+                            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                            outputStream.write(fileContents.getBytes());
+                            outputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            FileInputStream contents = openFileInput(filename);
+                            InputStreamReader inputStreamReader = new InputStreamReader(contents);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                            String lineData = "";
+                            String allContents = "";
+                            while ((lineData = bufferedReader.readLine()) != null){
+                                allContents += lineData + "\n";
+
+                            }
+                            //Log.d("MyApp", "allContents: " + allContents);
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         for (int i = 0; i < responseArray.length; i += 2) {
                             Log.d("MyApp", "responseArray: " + responseArray[i] + " : " + responseArray[i+1]);
                             Button newMaterial = new Button(mTextView.getContext());
-
 
                             final String insert;
                             final Boolean pro;
@@ -150,13 +172,32 @@ mButton.setOnClickListener(new View.OnClickListener() {
                                 }
                             });
 
-                            //materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mTextView.setText("That didn't work!");
+                String filename = "myfile";
+                FileOutputStream outputStream;
+
+                try {
+                    FileInputStream contents = openFileInput(filename);
+                    InputStreamReader inputStreamReader = new InputStreamReader(contents);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String lineData = "";
+                    String allContents = "";
+                    while ((lineData = bufferedReader.readLine()) != null){
+                        allContents += lineData + "\n";
+
+                    }
+                    Log.d("MyApp", "allContents: " + allContents);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mTextView.setText("Request sent. Waiting for Response...");

@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, about.class);
         startActivity(intent);
     }
+
+    public void showMap(View view) {
+        Intent intent = new Intent(this, map.class);
+        startActivity(intent);
+    }
 }
 
 

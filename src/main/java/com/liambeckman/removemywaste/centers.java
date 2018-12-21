@@ -33,13 +33,27 @@ public class centers extends AppCompatActivity {
         setContentView(R.layout.activity_centers);
 
         Intent intent = getIntent();
-        String center = intent.getExtras().getString("center");
+        final String center = intent.getExtras().getString("center");
         String address = intent.getExtras().getString("address");
 
         TextView mTextView = (TextView) findViewById(R.id.center);
         TextView mAddress = (TextView) findViewById(R.id.address);
         mTextView.setText(Html.fromHtml(center));
         mAddress.setText(address);
+
+        Button mButton;
+        mButton = (Button)findViewById(R.id.button2);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query="+Uri.encode(Html.fromHtml(center).toString())));
+                if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(browserIntent);
+                }
+            }
+        });
+
+
 
         Spanned centerSpan = Html.fromHtml(center);
         searchSchedules(centerSpan.toString());
