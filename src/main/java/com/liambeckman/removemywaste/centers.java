@@ -38,6 +38,7 @@ public class centers extends AppCompatActivity {
 
         TextView mTextView = (TextView) findViewById(R.id.center);
         TextView mAddress = (TextView) findViewById(R.id.address);
+
         mTextView.setText(Html.fromHtml(center));
         mAddress.setText(address);
 
@@ -71,7 +72,7 @@ public class centers extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-centers-materials?search=" + Uri.encode(center);
+        String url = "https://removemywaste.liambeckman.com/search-centers-Materials?search=" + Uri.encode(center);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -82,7 +83,7 @@ public class centers extends AppCompatActivity {
                         //mTextView.setText(response);
 
                         if (response.isEmpty()) {
-                            mTextView.setText("No materials found for this center.");
+                            mTextView.setText("No Materials found for this center.");
                             mTextView.setTextColor(0xffFF3232);
                             return;
                         }
@@ -104,7 +105,7 @@ public class centers extends AppCompatActivity {
                             final String center = responseArray[i];
 
 
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -173,7 +174,7 @@ public class centers extends AppCompatActivity {
                             final String center = responseArray[i];
 
 
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {

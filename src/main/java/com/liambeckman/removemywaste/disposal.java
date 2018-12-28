@@ -103,7 +103,7 @@ public class disposal extends AppCompatActivity {
                                 }
                             });
 
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {

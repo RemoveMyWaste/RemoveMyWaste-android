@@ -15,11 +15,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.liambeckman.removemywaste.db.AppDatabase;
 
 import android.text.Html;
 import android.net.Uri;
 
 public class materials extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class materials extends AppCompatActivity {
                         //mTextView.setText(response);
                         //Log.d("MyApp", "response: " + response);
                         mTextView.setText(response);
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
 
                     }
                 }, new Response.ErrorListener() {
@@ -111,7 +113,7 @@ public class materials extends AppCompatActivity {
                         //mTextView.setText(response);
                         Log.d("MyApp", "response: " + response);
                         mTextView.setText(Html.fromHtml(response));
-                        //materials[i].setText(responseArray[i*3]);
+                        //Materials[i].setText(responseArray[i*3]);
 
                     }
                 }, new Response.ErrorListener() {
@@ -182,7 +184,7 @@ public class materials extends AppCompatActivity {
                                 }
                             });
 
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {
