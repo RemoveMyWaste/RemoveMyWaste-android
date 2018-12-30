@@ -12,8 +12,8 @@ import java.util.List;
 @Dao
 public interface HandlingDao {
     // select all handling instructions for a given material
-    @Query("SELECT handling.instructions from handling " +
-            "INNER JOIN materials_handling ON materials_handling.hid = handling.id " +
+    @Query("SELECT handlingInstructions.id, handlingInstructions.instructions from handlingInstructions " +
+            "INNER JOIN materials_handling ON materials_handling.hid = handlingInstructions.id " +
             "INNER JOIN materials ON materials.id = materials_handling.mid " +
             "WHERE (materials.name = :material);"
     )

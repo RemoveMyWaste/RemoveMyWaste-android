@@ -14,7 +14,7 @@ public class timeConverter {
     }
 
     @TypeConverter
-    public static String timeToString(LocalTime time) {
+    public static String timeToString(Date time) {
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
         String returnTime = df.format(time);
         return returnTime;

@@ -6,17 +6,16 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(foreignKeys = {@ForeignKey(entity = Disposal.class,
+@Entity(tableName = "materials_disposal", primaryKeys = {"mid", "did"}, foreignKeys = {@ForeignKey(entity = Disposal.class,
         parentColumns = "id",
         childColumns = "did"),
         @ForeignKey(entity = Materials.class,
         parentColumns = "id",
         childColumns = "mid")})
 public class MaterialsDisposal {
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "did")
-    public int cid;
+    public int did;
     @NonNull
     @ColumnInfo(name = "mid")
     public int mid;

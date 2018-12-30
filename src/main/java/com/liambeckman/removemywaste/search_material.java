@@ -26,12 +26,6 @@ import com.android.volley.toolbox.Volley;
 import com.liambeckman.removemywaste.db.AppDatabase;
 import com.liambeckman.removemywaste.db.Materials;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 
@@ -53,8 +47,8 @@ public class search_material extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        EditText edit_txt = (EditText) findViewById(R.id.editText1);
-        mButton = (Button) findViewById(R.id.button1);
+        EditText edit_txt = findViewById(R.id.editText1);
+        mButton = findViewById(R.id.button1);
 
         edit_txt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
@@ -71,7 +65,7 @@ public class search_material extends AppCompatActivity {
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                mEdit = (EditText) findViewById(R.id.editText1);
+                mEdit = findViewById(R.id.editText1);
                 mEdit.getText().toString();
 
                 hideKeyboard(view);
@@ -96,9 +90,9 @@ public class search_material extends AppCompatActivity {
 
 
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.textView3);
+        final TextView mTextView = findViewById(R.id.textView3);
         final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearResults);
+        final LinearLayout ll = findViewById(R.id.linearResults);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         List<Materials> responseArray = mDb.materialsModel().findAllMaterials();

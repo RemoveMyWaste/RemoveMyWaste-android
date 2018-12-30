@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import java.time.LocalTime;
 import java.util.Date;
 
-@Entity(foreignKeys = @ForeignKey(entity = Centers.class,
+@Entity(tableName = "schedules", foreignKeys = @ForeignKey(entity = Centers.class,
         parentColumns = "id",
         childColumns = "cid"))
 @TypeConverters({Converters.class})
@@ -21,8 +21,8 @@ public class Schedules {
 
     public Integer day_of_week;
 
-    public Date time_open;
-    public Date time_closed;
+    public String time_open;
+    public String time_closed;
 
     @ColumnInfo(name = "cid")
     @NonNull

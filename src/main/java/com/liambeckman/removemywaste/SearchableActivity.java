@@ -31,7 +31,7 @@ public class SearchableActivity extends AppCompatActivity {
 
     protected void doMySearch (final String query){
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.textView3);
+        final TextView mTextView = findViewById(R.id.textView3);
         // ...
 
         // Instantiate the RequestQueue.

@@ -144,7 +144,7 @@ public class map extends AppCompatActivity {
         //inflate and create the map
         setContentView(R.layout.activity_map);
 
-        map = (MapView) findViewById(R.id.map);
+        map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         map.setMultiTouchControls(true);
@@ -154,13 +154,16 @@ public class map extends AppCompatActivity {
         mapController.setCenter(startPoint);
 
 
-
+        // google maps
+        /*
         Uri gmmIntentUri = Uri.parse("geo:0,0?q=Apex+Property+Clearing+and+Recycling");
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=Apex+Property+Clearing+and+Recycling"));
         if (browserIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(browserIntent);
         }
+        */
+
     }
 
 

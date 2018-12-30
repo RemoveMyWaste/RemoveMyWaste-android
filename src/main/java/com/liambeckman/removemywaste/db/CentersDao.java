@@ -6,6 +6,7 @@ import android.arch.persistence.room.Query;
 
 import com.liambeckman.removemywaste.centers;
 import com.liambeckman.removemywaste.disposal;
+import com.liambeckman.removemywaste.materials;
 
 import java.util.List;
 
@@ -22,16 +23,17 @@ public interface CentersDao {
     */
 
 
-    @Query("SELECT * FROM centers WHERE (centers.name LIKE :center) " +
+    @Query("SELECT * FROM centers WHERE centers.name LIKE '%' || :center || '%'" +
             "ORDER BY centers.name;"
     )
-    LiveData<List<Centers>> searchCenters(String center);
+    List<Centers> searchCenters(String center);
 
 
     @Query("select * from centers where id = :id")
-    Centers loadMaterialById(int id);
+    Centers loadCentersById(int id);
 
-    @Query("SELECT * FROM centers")
-    LiveData<List<Centers>> findAllCenters();
+    @Query("SELECT * FROM centers ORDER BY centers.name")
+    List<Centers> findAllCenters();
+
 
 }

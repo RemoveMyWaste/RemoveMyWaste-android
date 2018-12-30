@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.huma.room_for_asset.RoomAsset;
 
-@Database(entities = {Materials.class, Centers.class}, version = 2)
+@Database(entities = {Materials.class, Centers.class, CentersMaterials.class, Handling.class, Disposal.class, MaterialsHandling.class, MaterialsDisposal.class, Schedules.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -15,11 +15,11 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CentersDao centersModel();
 
-    //public abstract HandlingDao handlingInstructionsModel();
+    public abstract HandlingDao handlingInstructionsModel();
 
-    //public abstract DisposalDao disposalInstructionsModel();
+    public abstract DisposalDao disposalInstructionsModel();
 
-    //public abstract SchedulesDao schedulesModel();
+    public abstract SchedulesDao schedulesModel();
 
     public static AppDatabase buildDatabase(Context context) {
         if (INSTANCE == null) {

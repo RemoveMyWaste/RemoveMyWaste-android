@@ -12,13 +12,10 @@ import java.util.List;
 public interface DisposalDao {
 
     // select all disposal instructions for a given material
-    /*
-    @Query("SELECT disposal.instructions from disposal " +
-            "INNER JOIN materials_disposal ON materials_disposal.did = disposal.id " +
+    @Query("SELECT disposalInstructions.id, disposalInstructions.instructions from disposalInstructions " +
+            "INNER JOIN materials_disposal ON materials_disposal.did = disposalInstructions.id " +
             "INNER JOIN materials ON materials.id = materials_disposal.mid " +
             "WHERE (materials.name = :material);"
     )
     LiveData<List<Disposal>> findDisposalByMaterial(String material);
-    */
-
 }

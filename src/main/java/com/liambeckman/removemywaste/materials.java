@@ -28,9 +28,9 @@ public class materials extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_materials);
 
-        final TextView mTextView = (TextView) findViewById(R.id.material);
-        final TextView centers = (TextView) findViewById(R.id.centers);
-        final TextView disposal = (TextView) findViewById(R.id.disposalHome);
+        final TextView mTextView = findViewById(R.id.material);
+        final TextView centers = findViewById(R.id.centers);
+        final TextView disposal = findViewById(R.id.disposalHome);
         Intent intent = getIntent();
         final String material = intent.getExtras().getString("material");
 
@@ -54,7 +54,7 @@ public class materials extends AppCompatActivity {
 
     public void doMySearch (final String query){
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.handling);
+        final TextView mTextView = findViewById(R.id.handling);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -92,7 +92,7 @@ public class materials extends AppCompatActivity {
 
     public void searchDisposal (final String query){
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.disposal);
+        final TextView mTextView = findViewById(R.id.disposal);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -130,9 +130,9 @@ public class materials extends AppCompatActivity {
 
 
     public void searchCenters(String material) {
-        final TextView mTextView = (TextView) findViewById(R.id.centers);
+        final TextView mTextView = findViewById(R.id.centers);
         final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearCenters);
+        final LinearLayout ll = findViewById(R.id.linearCenters);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // Instantiate the RequestQueue.
