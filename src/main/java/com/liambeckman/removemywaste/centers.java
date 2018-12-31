@@ -1,20 +1,18 @@
 package com.liambeckman.removemywaste;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.text.Spanned;
-import android.widget.TextView;
-
+import android.text.Html;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,22 +22,20 @@ import com.android.volley.toolbox.Volley;
 import com.liambeckman.removemywaste.db.AppDatabase;
 import com.liambeckman.removemywaste.db.Materials;
 import com.liambeckman.removemywaste.db.Schedules;
-
-import android.content.Intent;
-
-import android.text.Html;
-import android.net.Uri;
-
 import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.DelayedMapListener;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+
 
 public class centers extends AppCompatActivity {
 
@@ -64,25 +60,21 @@ public class centers extends AppCompatActivity {
 
         Button mButton;
         mButton = findViewById(R.id.button2);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Code here executes on main thread after user presses button
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query="+Uri.encode(Html.fromHtml(center).toString())));
-                if (browserIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(browserIntent);
-                }
+        mButton.setOnClickListener(v -> {
+            // Code here executes on main thread after user presses button
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query="+Uri.encode(Html.fromHtml(center).toString())));
+            if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(browserIntent);
             }
         });
 
         Button eButton;
         eButton = findViewById(R.id.error);
-        eButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Code here executes on main thread after user presses button
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://removemywaste.liambeckman.com/issues"));
-                if (browserIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(browserIntent);
-                }
+        eButton.setOnClickListener(v -> {
+            // Code here executes on main thread after user presses button
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://removemywaste.liambeckman.com/issues"));
+            if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(browserIntent);
             }
         });
 
@@ -106,7 +98,6 @@ public class centers extends AppCompatActivity {
         map.setMultiTouchControls(true);
 
 
-
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String apiAddress = Uri.encode(address);
@@ -117,67 +108,51 @@ public class centers extends AppCompatActivity {
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                response -> {
 
-                        if (response.isEmpty()) {
-                            mTextView.setText("No handling instructions found for this material.");
-                            mTextView.setTextColor(0xffFF3232);
-                            return;
-                        }
-                        // Display the repspose string.
-                        //mTextView.setText(response);
-                        Log.d("MyApp", "response: " + response);
-                        //mTextView.setText(response);
-                        //materials[i].setText(responseArray[i*3]);
-                        double lat = 45.5;
-                        double lng = -122.6;
+                    double lat = 45.5;
+                    double lng = -122.6;
 
-
-
-                        JSONObject reader = null;
-                        try {
-                            reader = new JSONObject(response);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            JSONObject results = (JSONObject) reader.getJSONArray("results").get(0);
-                            JSONObject geometry = results.getJSONObject("geometry");
-                            JSONObject location = geometry.getJSONObject("location");
-
-                            lat = location.getDouble("lat");
-                            lng = location.getDouble("lng");
-                            //Log.d("MyApp", "JSONObject: " + geometry.getJSONObject("location").getDouble("lat"));
-                            //Log.d("MyApp", "JSONObject: " + reader.getJSONArray("results"));
-                            //JSONObject b = a.getJSONObject(2);
-                            //Log.d("MyApp", "JSONObject: " + b);
-                            Log.d("MyApp", "lat: " + lat);
-                            Log.d("MyApp", "lng: " + lng);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        IMapController mapController = map.getController();
-                        mapController.setZoom(12);
-                        GeoPoint startPoint = new GeoPoint(lat, lng);
-                        mapController.setCenter(startPoint);
-
-
+                    JSONObject reader = null;
+                    try {
+                        reader = new JSONObject(response);
+                        JSONObject results = (JSONObject) reader.getJSONArray("results").get(0);
+                        JSONObject geometry = results.getJSONObject("geometry");
+                        JSONObject location = geometry.getJSONObject("location");
+                        lat = location.getDouble("lat");
+                        lng = location.getDouble("lng");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
-            }
+
+                    IMapController mapController = map.getController();
+                    mapController.setZoom(13);
+                    GeoPoint startPoint = new GeoPoint(lat, lng);
+                    mapController.setCenter(startPoint);
+
+
+                    Marker startMarker = new Marker(map);
+                    startMarker.setPosition(startPoint);
+                    startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                    startMarker.setTitle(center);
+                    map.getOverlays().add(startMarker);
+
+                }, error -> {
+            //mTextView.setText("That didn't work!");
         });
-        mTextView.setText("Request sent. Waiting for Response...");
+        //mTextView.setText("Request sent. Waiting for Response...");
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        /**
+         * Request all parents to relinquish the touch events
+         */
+        map.requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(ev);
     }
 
     public void onResume(){

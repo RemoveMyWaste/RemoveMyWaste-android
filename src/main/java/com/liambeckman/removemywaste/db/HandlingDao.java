@@ -17,5 +17,5 @@ public interface HandlingDao {
             "INNER JOIN materials ON materials.id = materials_handling.mid " +
             "WHERE (materials.name = :material);"
     )
-    LiveData<List<Handling>> findHandlingByMaterial(String material);
+    List<Handling> findHandlingByMaterial(String material);
 }

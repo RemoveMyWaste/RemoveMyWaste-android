@@ -37,26 +37,14 @@
         android:id="@+id/button_about"
         android:layout_width="0dp"
         android:layout_height="130dp"
+        android:layout_marginBottom="8dp"
         android:onClick="showAbout"
         android:text="About"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
-
-       <Button
-        android:id="@+id/button_map"
-        android:layout_width="0dp"
-        android:layout_height="130dp"
-        android:onClick="showMap"
-        android:text="Map"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_about" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

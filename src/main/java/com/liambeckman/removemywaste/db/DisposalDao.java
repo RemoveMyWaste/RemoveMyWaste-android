@@ -17,5 +17,5 @@ public interface DisposalDao {
             "INNER JOIN materials ON materials.id = materials_disposal.mid " +
             "WHERE (materials.name = :material);"
     )
-    LiveData<List<Disposal>> findDisposalByMaterial(String material);
+    List<Disposal> findDisposalByMaterial(String material);
 }

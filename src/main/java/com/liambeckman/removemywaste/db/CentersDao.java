@@ -35,5 +35,11 @@ public interface CentersDao {
     @Query("SELECT * FROM centers ORDER BY centers.name")
     List<Centers> findAllCenters();
 
+    @Query("SELECT centers.* FROM centers_materials " +
+            "INNER JOIN centers ON centers.id = centers_materials.CID " +
+            "INNER JOIN materials ON materials.id = centers_materials.MID " +
+            "WHERE (materials.name = :material) " +
+            "ORDER BY centers.name;")
+    List<Centers> searchCentersByMaterial(String material);
 
 }

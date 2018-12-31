@@ -24,6 +24,7 @@ import java.util.List;
 public class search_centers extends AppCompatActivity {
 
     Button mButton;
+    Button mButtonClear;
     EditText mEdit;
 
     protected AppDatabase mDb;
@@ -39,6 +40,7 @@ public class search_centers extends AppCompatActivity {
 
         EditText edit_txt = findViewById(R.id.editText1);
         mButton = findViewById(R.id.button1);
+        mButtonClear = findViewById(R.id.buttonClear);
 
         // hide keyboard after enter key is pressed
         edit_txt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -56,11 +58,14 @@ public class search_centers extends AppCompatActivity {
 
         // perform search if search button is pressed
         mButton.setOnClickListener(view -> {
-            String query = mEdit.getText().toString();
+            String query = edit_txt.getText().toString();
             searchAllCenters(query);
             hideKeyboard(view);
         });
 
+        mButtonClear.setOnClickListener(view -> {
+            edit_txt.setText("");
+        });
 
         // updates search after any change to search text
         edit_txt.addTextChangedListener(new TextWatcher() {

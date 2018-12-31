@@ -1,11 +1,11 @@
 package com.liambeckman.removemywaste;
 
-import android.app.SearchManager;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,16 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.liambeckman.removemywaste.db.AppDatabase;
 import com.liambeckman.removemywaste.db.Materials;
-
 import java.util.List;
 
 
@@ -33,7 +25,7 @@ public class search_material extends AppCompatActivity {
 
     Button mButton;
     EditText mEdit;
-    TextView mText;
+    Button mButtonClear;
 
     private AppDatabase mDb;
 
@@ -49,6 +41,7 @@ public class search_material extends AppCompatActivity {
 
         EditText edit_txt = findViewById(R.id.editText1);
         mButton = findViewById(R.id.button1);
+        mButtonClear = findViewById(R.id.buttonClear);
 
         edit_txt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
@@ -63,17 +56,38 @@ public class search_material extends AppCompatActivity {
             }
         });
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                mEdit = findViewById(R.id.editText1);
-                mEdit.getText().toString();
+        mButton.setOnClickListener(view -> {
+            mEdit = findViewById(R.id.editText1);
+            mEdit.getText().toString();
 
-                hideKeyboard(view);
-                //mText.setText("Welcome "+mEdit.getText().toString()+"!");
-                doMySearch(mEdit.getText().toString());
-            }
+            hideKeyboard(view);
+            doMySearch(mEdit.getText().toString());
         });
 
+
+        mButtonClear.setOnClickListener(view -> {
+            edit_txt.setText("");
+        });
+
+        // updates search after any change to search text
+        edit_txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mEdit   = findViewById(R.id.editText1);
+                String query = mEdit.getText().toString();
+                doMySearch(query);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
@@ -86,8 +100,6 @@ public class search_material extends AppCompatActivity {
     public void doMySearch(final String query) {
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.buildDatabase(getApplicationContext());
-        //mDb = Room.databaseBuilder(getApplicationContext(), AppDatabase.class)
-
 
         // https://developer.android.com/training/volley/simple#java
         final TextView mTextView = findViewById(R.id.textView3);
@@ -95,7 +107,9 @@ public class search_material extends AppCompatActivity {
         final LinearLayout ll = findViewById(R.id.linearResults);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        List<Materials> responseArray = mDb.materialsModel().findAllMaterials();
+        ll.removeAllViews();
+
+        List<Materials> responseArray = mDb.materialsModel().searchMaterials(query);
         for (Materials material : responseArray) {
             Log.d("mydatabase", material.name);
         }
