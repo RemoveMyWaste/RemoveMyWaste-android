@@ -66,5 +66,5 @@ A wishlist of sorts:
 - Request user's location, so that the nearest center's are returned.
 - Add user profile with options to "Login/Logout" or "Continue as Guest".
 - An option to "Update database" would be helpful. Or even the option to "Select database" should another one be made.
-- ~~Switch from remote MySQL/MariaDB database to local SQLite: so users can read from the database without a network connection.~~ Added in v0.2.0.
-- ~~Add map view.~~ Added in v0.2.0.
+- ~~Switch from remote MySQL/MariaDB database to local SQLite: so users can read from the database without a network connection.~~ **Added in v0.2.0.**
+- ~~Add map view.~~ **Added in v0.2.0.**
