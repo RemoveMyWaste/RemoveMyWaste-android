@@ -1,34 +1,32 @@
 package com.liambeckman.removemywaste;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.liambeckman.removemywaste.db.AppDatabase;
+import com.liambeckman.removemywaste.db.Centers;
+import com.liambeckman.removemywaste.db.Disposal;
+import com.liambeckman.removemywaste.db.Handling;
 
-import android.text.Html;
-import android.net.Uri;
+import java.util.List;
 
 public class materials extends AppCompatActivity {
+
+
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_materials);
 
-        final TextView mTextView = (TextView) findViewById(R.id.material);
-        final TextView centers = (TextView) findViewById(R.id.centers);
-        final TextView disposal = (TextView) findViewById(R.id.disposalHome);
+        final TextView mTextView = findViewById(R.id.material);
+        final TextView centers = findViewById(R.id.centers);
+        final TextView disposal = findViewById(R.id.disposalHome);
         Intent intent = getIntent();
         final String material = intent.getExtras().getString("material");
 
@@ -42,7 +40,7 @@ public class materials extends AppCompatActivity {
             disposal.setText("professional disposal required" + " \u2605");
             searchCenters(material);
         }
-         else {
+        else {
             mTextView.setText(material);
             disposal.setText("home disposal allowed");
             searchDisposal(material);
@@ -50,153 +48,102 @@ public class materials extends AppCompatActivity {
 
     }
 
+    //handling
     public void doMySearch (final String query){
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.handling);
+        final TextView mTextView = findViewById(R.id.handling);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-handling?search=" + Uri.encode(query);
+        mDb = AppDatabase.buildDatabase(getApplicationContext());
+        List<Handling> responseArray = mDb.handlingInstructionsModel().findHandlingByMaterial(query);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+        if (responseArray.isEmpty()) {
+            mTextView.setText("No handling instructions found for this material.");
+            mTextView.setTextColor(0xffFF3232);
+            return;
+        }
 
-                        if (response.isEmpty()) {
-                            mTextView.setText("No handling instructions found for this material.");
-                            mTextView.setTextColor(0xffFF3232);
-                            return;
-                        }
-                        // Display the repspose string.
-                        //mTextView.setText(response);
-                        //Log.d("MyApp", "response: " + response);
-                        mTextView.setText(response);
-                            //materials[i].setText(responseArray[i*3]);
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
-            }
-        });
-        mTextView.setText("Request sent. Waiting for Response...");
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        String instructions = "";
+        for (int i = 0; i < responseArray.size(); i++) {
+            instructions += responseArray.get(i).instructions;
+        }
+        mTextView.setText(instructions);
     }
 
     public void searchDisposal (final String query){
         // https://developer.android.com/training/volley/simple#java
-        final TextView mTextView = (TextView) findViewById(R.id.disposal);
+        final TextView mTextView = findViewById(R.id.disposal);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-disposal?search=" + Uri.encode(query);
+        mDb = AppDatabase.buildDatabase(getApplicationContext());
+        List<Disposal> responseArray = mDb.disposalInstructionsModel().findDisposalByMaterial(query);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+        if (responseArray.isEmpty()) {
+            mTextView.setText("No disposal instructions found for this material.");
+            mTextView.setTextColor(0xffFF3232);
+            return;
+        }
 
-                        if (response.isEmpty()) {
-                            mTextView.setText("No disposal instructions found for this material.");
-                            mTextView.setTextColor(0xffFF3232);
-                            return;
-                        }
-                        // Display the repspose string.
-                        //mTextView.setText(response);
-                        Log.d("MyApp", "response: " + response);
-                        mTextView.setText(Html.fromHtml(response));
-                        //materials[i].setText(responseArray[i*3]);
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
-            }
-        });
-        mTextView.setText("Request sent. Waiting for Response...");
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        String instructions = "";
+        for (int i = 0; i < responseArray.size(); i++) {
+            instructions += responseArray.get(i).instructions;
+        }
+        mTextView.setText(instructions);
     }
 
 
     public void searchCenters(String material) {
-        final TextView mTextView = (TextView) findViewById(R.id.centers);
+        final TextView mTextView = findViewById(R.id.centers);
         final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearCenters);
+        final LinearLayout ll = findViewById(R.id.linearCenters);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-centers?search=" + material;
+        mDb = AppDatabase.buildDatabase(getApplicationContext());
+        List<Centers> responseArray = mDb.centersModel().searchCentersByMaterial(material);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the repspose string.
-                        //mTextView.setText(response);
 
-                        if (response.isEmpty()) {
-                            mTextView.setText("No centers found for this material.");
-                            mTextView.setTextColor(0xffFF3232);
-                            Log.d("MyApp", "NO CNETERS ODUND" + "Resposne: " + response);
-                            return;
-                        }
+        /*
+        if (response.isEmpty()) {
+            mTextView.setText("No centers found for this material.");
+            mTextView.setTextColor(0xffFF3232);
+            return;
+        }
+        */
 
-                        final String[] responseArray = response.split("\\r?\\n");
-                        Log.d("MyApp", "response: " + response);
-                        mTextView.setText("");
-                        for (int i = 0; i < responseArray.length; i += 2) {
-                            Log.d("MyApp", "responseArray: " + responseArray[i]);
-                            Button newCenter = new Button(mTextView.getContext());
-                            TextView address = new TextView(mTextView.getContext());
-                            newCenter.setText(Html.fromHtml(responseArray[i]));
-                            newCenter.setId(i);
-                            newCenter.setAllCaps(false);
-                            ll.addView(newCenter, lp);
+        for (int i = 0; i < responseArray.size(); i += 2) {
+            Log.d("MyApp", "responseArray: " + responseArray.get(i));
+            Button newCenter = new Button(mTextView.getContext());
+            TextView address = new TextView(mTextView.getContext());
+            newCenter.setText(responseArray.get(i).name);
+            newCenter.setId(i);
+            newCenter.setAllCaps(false);
+            ll.addView(newCenter, lp);
 
-                            address.setText(responseArray[i+1]);
 
-                            ll.addView(address, lp);
+            Integer street_number = responseArray.get(i).street_number;
+            String street_direction = responseArray.get(i).street_direction;
+            String street_name = responseArray.get(i).street_name;
+            String street_type = responseArray.get(i).street_type;
+            String city = responseArray.get(i).city;
+            String state = responseArray.get(i).state;
+            String zip = responseArray.get(i).zip;
 
-                            final String center = responseArray[i];
-                            final String mAddress = responseArray[i+1];
+            String centerAddress = street_number.toString() + " " + street_direction + " " + street_name + " " + street_type + " "  + city + " " + state + " " + zip;
+            address.setText(centerAddress);
 
-                            newCenter.setOnClickListener(new View.OnClickListener() {
+            ll.addView(address, lp);
 
-                                @Override
-                                public void onClick(View v) {
-                                    Intent i = new Intent(getApplicationContext(), centers.class);
-                                    i.putExtra("center", center);
-                                    i.putExtra("address", mAddress);
-                                    startActivity(i);
-                                }
-                            });
+            final String center = responseArray.get(i).name;
+            final String mAddress = centerAddress;
+            final int id = responseArray.get(i).id;
 
-                            //materials[i].setText(responseArray[i*3]);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
-            }
-        });
+            newCenter.setOnClickListener(v -> {
+                Intent i1 = new Intent(getApplicationContext(), centers.class);
+                i1.putExtra("center", center);
+                i1.putExtra("address", mAddress);
+                i1.putExtra("id", id);
+                startActivity(i1);
+            });
 
-        mTextView.setText("Request sent. Waiting for Response...");
-        //ll.removeAllViews();
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        }
     }
 
 }

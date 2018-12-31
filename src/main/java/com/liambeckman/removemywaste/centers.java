@@ -1,31 +1,46 @@
 package com.liambeckman.removemywaste;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import android.text.Spanned;
-import android.widget.TextView;
-
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.liambeckman.removemywaste.db.AppDatabase;
+import com.liambeckman.removemywaste.db.Materials;
+import com.liambeckman.removemywaste.db.Schedules;
+import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.events.DelayedMapListener;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
-import android.content.Intent;
-
-import android.text.Html;
-import android.net.Uri;
 
 public class centers extends AppCompatActivity {
+
+    private AppDatabase mDb;
+    MapView map = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,146 +48,223 @@ public class centers extends AppCompatActivity {
         setContentView(R.layout.activity_centers);
 
         Intent intent = getIntent();
-        String center = intent.getExtras().getString("center");
+        final String center = intent.getExtras().getString("center");
         String address = intent.getExtras().getString("address");
+        final Integer id = intent.getExtras().getInt("id");
 
-        TextView mTextView = (TextView) findViewById(R.id.center);
-        TextView mAddress = (TextView) findViewById(R.id.address);
+        TextView mTextView = findViewById(R.id.center);
+        TextView mAddress = findViewById(R.id.address);
+
         mTextView.setText(Html.fromHtml(center));
         mAddress.setText(address);
 
-        Spanned centerSpan = Html.fromHtml(center);
-        searchSchedules(centerSpan.toString());
-
-        searchMaterials(centerSpan.toString());
-    }
-
-
-
-    public void searchMaterials(String center) {
-        final TextView mTextView = (TextView) findViewById(R.id.status);
-        final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearMaterials);
-        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://removemywaste.liambeckman.com/search-centers-materials?search=" + Uri.encode(center);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the repspose string.
-                        //mTextView.setText(response);
-
-                        if (response.isEmpty()) {
-                            mTextView.setText("No materials found for this center.");
-                            mTextView.setTextColor(0xffFF3232);
-                            return;
-                        }
-
-                        Html.fromHtml(response);
-
-                        final String[] responseArray = response.split("\\r?\\n");
-                        Log.d("MyApp", "response: " + response);
-                        mTextView.setText("");
-                        for (int i = 0; i < responseArray.length; i++) {
-                            Log.d("MyApp", "responseArray: " + responseArray[i]);
-                            TextView material = new TextView(mTextView.getContext());
-
-                            material.setText(responseArray[i]);
-
-                            ll.addView(material, lp);
-
-
-                            final String center = responseArray[i];
-
-
-                            //materials[i].setText(responseArray[i*3]);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
+        Button mButton;
+        mButton = findViewById(R.id.button2);
+        mButton.setOnClickListener(v -> {
+            // Code here executes on main thread after user presses button
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query="+Uri.encode(Html.fromHtml(center).toString())));
+            if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(browserIntent);
             }
         });
 
-        mTextView.setText("Request sent. Waiting for Response...");
-        //ll.removeAllViews();
+        Button eButton;
+        eButton = findViewById(R.id.error);
+        eButton.setOnClickListener(v -> {
+            // Code here executes on main thread after user presses button
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://removemywaste.liambeckman.com/issues"));
+            if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(browserIntent);
+            }
+        });
+
+        searchSchedules(id);
+        searchMaterials(id);
+
+        //load/initialize the osmdroid configuration, this can be done
+        Context ctx = getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        //setting this before the layout is inflated is a good idea
+        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
+        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
+        //see also StorageUtils
+        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
+
+        //inflate and create the map
+        //setContentView(R.layout.activity_main);
+
+        map = findViewById(R.id.mapview);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setMultiTouchControls(true);
+
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String apiAddress = Uri.encode(address);
+        //String url = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + apiAddress + "&benchmark=9&format=json";
+        String key = "AIzaSyCPb7MDJh3zsvepb2OMrjr0E0R5wk9Bdqw";
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + apiAddress + "&key=" + key;
+        Log.d("MyApp", url);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+
+                    double lat = 45.5;
+                    double lng = -122.6;
+
+                    JSONObject reader = null;
+                    try {
+                        reader = new JSONObject(response);
+                        JSONObject results = (JSONObject) reader.getJSONArray("results").get(0);
+                        JSONObject geometry = results.getJSONObject("geometry");
+                        JSONObject location = geometry.getJSONObject("location");
+                        lat = location.getDouble("lat");
+                        lng = location.getDouble("lng");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    IMapController mapController = map.getController();
+                    mapController.setZoom(13);
+                    GeoPoint startPoint = new GeoPoint(lat, lng);
+                    mapController.setCenter(startPoint);
+
+
+                    Marker startMarker = new Marker(map);
+                    startMarker.setPosition(startPoint);
+                    startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                    startMarker.setTitle(center);
+                    map.getOverlays().add(startMarker);
+
+                }, error -> {
+            //mTextView.setText("That didn't work!");
+        });
+        //mTextView.setText("Request sent. Waiting for Response...");
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        /**
+         * Request all parents to relinquish the touch events
+         */
+        map.requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(ev);
+    }
 
-    public void searchSchedules(String center) {
-        final TextView mTextView = (TextView) findViewById(R.id.status);
+    public void onResume(){
+        super.onResume();
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    public void onPause(){
+        super.onPause();
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+
+    public void searchMaterials(int id) {
+        final TextView mTextView = findViewById(R.id.status);
         final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearSchedules);
+        final LinearLayout ll = findViewById(R.id.linearMaterials);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        mDb = AppDatabase.buildDatabase(getApplicationContext());
+        List<Materials> list = mDb.materialsModel().searchCentersMaterials(id);
+
+        /*
+        if (response.isEmpty()) {
+            mTextView.setText("No Materials found for this center.");
+            mTextView.setTextColor(0xffFF3232);
+            return;
+        }
+        */
+
+        for (int i = 0; i < list.size(); i++) {
+            TextView material = new TextView(mTextView.getContext());
+
+            material.setText(list.get(i).name);
+
+            ll.addView(material, lp);
+        }
+
+    }
+
+
+    public void searchSchedules(int id) {
+        final TextView mTextView = findViewById(R.id.status);
+        final Button[] materials = new Button[100];
+        final LinearLayout ll = findViewById(R.id.linearSchedules);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(10, 5, 10, 5);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("MyApp", center);
-        String url = "https://removemywaste.liambeckman.com/search-schedules?search=" + Uri.encode(center);
+        mDb = AppDatabase.buildDatabase(getApplicationContext());
+        List<Schedules> responseArray = mDb.schedulesModel().searchSchedules(id);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the repspose string.
-                        //mTextView.setText(response);
+        /*
+        if (response.isEmpty()) {
+            mTextView.setText("No schedules found for this center.");
+            mTextView.setTextColor(0xffFF3232);
+            return;
+        }
+        */
 
-                        if (response.isEmpty()) {
-                            mTextView.setText("No schedules found for this center.");
-                            mTextView.setTextColor(0xffFF3232);
-                            return;
-                        }
+        for (int i = 0; i < responseArray.size(); i++) {
 
-                        final String[] responseArray = response.split("\\r?\\n");
-                        Log.d("MyApp", "response: " + response);
-                        mTextView.setText("");
-                        for (int i = 0; i < responseArray.length; i += 3) {
-                            Log.d("MyApp", "responseArray: " + responseArray[i]);
-                            TextView day_of_week = new TextView(mTextView.getContext());
-                            TextView time = new TextView(mTextView.getContext());
+            TextView day_of_week = new TextView(mTextView.getContext());
+            TextView time = new TextView(mTextView.getContext());
 
-                            LinearLayout llhorizontal = new LinearLayout(mTextView.getContext());
-                            llhorizontal.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout llhorizontal = new LinearLayout(mTextView.getContext());
+            llhorizontal.setOrientation(LinearLayout.HORIZONTAL);
 
-                            day_of_week.setText(responseArray[i]);
-                            day_of_week.setWidth(250);
-                            time.setText(responseArray[i+1] + " to " + responseArray[i+2]);
+            int day = responseArray.get(i).day_of_week;
+            String dayString = "";
+            switch (day) {
+                case(1):
+                    dayString = "Sunday";
+                    break;
+                case(2):
+                    dayString = "Monday";
+                    break;
+                case(3):
+                    dayString = "Tuesday";
+                    break;
+                case(4):
+                    dayString = "Wednesday";
+                    break;
+                case(5):
+                    dayString = "Thursday";
+                    break;
+                case(6):
+                    dayString = "Friday";
+                    break;
+                case(7):
+                    dayString = "Saturday";
+                    break;
 
-                            llhorizontal.addView(day_of_week, lp);
-                            llhorizontal.addView(time, lp);
-
-                            ll.addView(llhorizontal, lp);
-
-
-
-                            final String center = responseArray[i];
-
-
-                            //materials[i].setText(responseArray[i*3]);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
             }
-        });
 
-        mTextView.setText("Request sent. Waiting for Response...");
-        //ll.removeAllViews();
+            day_of_week.setText(dayString);
+            day_of_week.setWidth(250);
+            time.setText(responseArray.get(i).time_open + " to " + responseArray.get(i).time_closed);
 
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+            llhorizontal.addView(day_of_week, lp);
+            llhorizontal.addView(time, lp);
+
+            ll.addView(llhorizontal, lp);
+
+        }
     }
 }

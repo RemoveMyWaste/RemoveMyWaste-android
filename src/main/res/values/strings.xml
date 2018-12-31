@@ -8,4 +8,5 @@
     <string name="material_name">Material Name:</string>
     <string name="search_hint">Search</string>
     <string name="app_label">RemoveMyWaste</string>
+    <string name="title_activity_gmaps">Map</string>
 </resources>

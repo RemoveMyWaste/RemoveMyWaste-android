@@ -33,9 +33,9 @@ public class disposal extends AppCompatActivity {
         Intent intent = getIntent();
         String material = intent.getExtras().getString("material");
 
-        final TextView mTextView = (TextView) findViewById(R.id.material);
-        final TextView centers = (TextView) findViewById(R.id.centers);
-        final TextView disposal = (TextView) findViewById(R.id.disposal);
+        final TextView mTextView = findViewById(R.id.material);
+        final TextView centers = findViewById(R.id.centers);
+        final TextView disposal = findViewById(R.id.disposal);
 
         mTextView.setText(material);
 
@@ -54,9 +54,9 @@ public class disposal extends AppCompatActivity {
         }
 
     public void searchCenters(String material) {
-        final TextView mTextView = (TextView) findViewById(R.id.centers);
+        final TextView mTextView = findViewById(R.id.centers);
         final Button[] materials = new Button[100];
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.linearCenters);
+        final LinearLayout ll = findViewById(R.id.linearCenters);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // Instantiate the RequestQueue.
@@ -103,7 +103,7 @@ public class disposal extends AppCompatActivity {
                                 }
                             });
 
-                            //materials[i].setText(responseArray[i*3]);
+                            //Materials[i].setText(responseArray[i*3]);
                         }
                     }
                 }, new Response.ErrorListener() {
