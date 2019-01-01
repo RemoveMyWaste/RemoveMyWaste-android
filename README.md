@@ -62,9 +62,9 @@ The database that provides the hazardous materials data to the app may be found 
 A wishlist of sorts:
 
 - iOS version: This might involve porting form native Java to a cross-platform framework like React Native.
-- ~~Web version: a parallel version for desktop users.~~ **https://removemywaste.liambeckman.com/**
 - Request user's location, so that the nearest center's are returned.
 - Add user profile with options to "Login/Logout" or "Continue as Guest".
 - An option to "Update database" would be helpful. Or even the option to "Select database" should another one be made.
+- ~~Web version: a parallel version for desktop users.~~ **https://removemywaste.liambeckman.com/**
 - ~~Switch from remote MySQL/MariaDB database to local SQLite: so users can read from the database without a network connection.~~ **Added in v0.2.0.**
 - ~~Add map view.~~ **Added in v0.2.0.**
