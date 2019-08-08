@@ -13,7 +13,7 @@ Android device or emulator running Android version 4.0.4 (Ice Cream Sandwich, AP
 
 ## Download URL: 
 
-- Go to to https://github.com/cs361-group24/RemoveMyWaste/releases
+- Go to to https://github.com/RemoveMyWaste/RemoveMyWaste/releases
 - Download `RemoveMyWaste.apk` from the latest release.
 
 ## To Install:
@@ -35,13 +35,13 @@ Pull requests welcome!
 
 The user-facing components of the app are developed in [android studio](https://developer.android.com/studio/).
 
-The database that provides the hazardous materials data to the app may be found here ⇢ [database](https://github.com/cs361-group24/database).
+The database that provides the hazardous materials data to the app may be found here ⇢ [database](https://github.com/RemoveMyWaste/database).
 
 ### To clone this repo into android studio
 
 - I'm in android studio: File > New > Project from Version Control > Git     
 - I'm on the splash screen: Checkout project from Version Control
-2) Enter **https://github.com/cs361-group24/RemoveMyWaste** into the url field. Click OK/Clone.
+2) Enter **https://github.com/RemoveMyWaste/RemoveMyWaste** into the url field. Click OK/Clone.
 
 ### To commit after changing files
 
